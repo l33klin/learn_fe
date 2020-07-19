@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+        <!--vue的版本：2.5.15-->
+        <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    </head>
+
+    <body>
+        <!--这个div区域就是MVVM中的 View-->
+        <div id="app">
+            <h1>Bitcoin Price Index</h1>
+            <div v-for="currency in info" class="currency">
+                {{ currency.description }}:
+                    <span class="lighten">
+                    <span v-html="currency.symbol"></span>{{ currency.rate_float | currencydecimal }}
+                </span>
+            </div>
+        </div>
+
+    </body>
+
+    <script>
+        new Vue({
+            el: '#app',
+            data() {
+                return {info: null}
+            },
+            mounted() {
+                axios
+                    .get('https://api.coindesk.com/v1/bpi/currentprice.json')
+                    .then(response => (this.info = response.data.bpi))
+            }
+        })
+        
+    </script>
+
+</html>
